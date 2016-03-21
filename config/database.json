@@ -1,0 +1,29 @@
+{
+    "production": {
+        "host": "ds021289.mlab.com",
+        "db": "cmp-api-prod",
+        "port": "21289",
+        "credentials": {
+            "user": "cmp-api-prod",
+            "pass": "cmp-api-prod333"
+        }
+    },
+    "development": {
+        "host": "ds021289.mlab.com",
+        "db": "cmp-api-dev",
+        "port": "21289",
+        "credentials": {
+            "user": "cmp-api-dev",
+            "pass": "cmp-api-dev333"
+        }
+    },
+    "test": {
+        "host": "ds021299.mlab.com",
+        "db": "cmp-api-test",
+        "port": "21299",
+        "credentials": {
+            "user": "cmp-api-test",
+            "pass": "cmp-api-test333"
+        }
+    }
+}
