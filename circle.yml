@@ -4,3 +4,8 @@ dependencies:
 test:
   pre:
     - dredd
+deployment:
+  staging:
+    branch: master
+    heroku:
+      appname: cmp-api
