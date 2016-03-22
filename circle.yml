@@ -6,6 +6,11 @@ machine:
   environment:
     NODE_ENV: test
     PORT: 3001
+dependencies:
+  pre:
+    # start the web server
+    - 'npm start':
+          background: true
 test:
   override:
     - mocha ./test
