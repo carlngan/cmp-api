@@ -6,7 +6,6 @@ machine:
   environment:
     NODE_ENV: test
     PORT: 3001
-test:
 deployment:
   production:
     branch: master
