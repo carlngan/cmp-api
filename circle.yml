@@ -6,6 +6,9 @@ machine:
   environment:
     NODE_ENV: test
     PORT: 3001
+test:
+  override:
+    - mocha ./test
 deployment:
   production:
     branch: master
