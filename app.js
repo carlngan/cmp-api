@@ -29,7 +29,27 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-//app.use('/claims', require('./modules/claims/api/claims.js'));
+/*
+@todo validate xml (if any) against xsd in claim
+var xsd = require('libxml-xsd');
+
+fs = require('fs');
+var schemaStr = fs.readFileSync("./MitchellClaim.xsd");
+var claimStr = fs.readFileSync("./create-claim.xml");
+xsd.parseFile("./MitchellClaim.xsd", function(err, schema){
+    console.log("HELO");
+    console.log(schema);
+    schema.validateFile("./create-claim.xml", function(err, validationErrors){
+        console.log(validationErrors);
+        // err contains any technical error
+        // validationError is an array, null if the validation is ok
+    });
+});
+*/
+
+
+app.use('/authentication', require('./modules/authentication/api/authentication'));
+app.use('/claims', require('./modules/claims/api/claims'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
