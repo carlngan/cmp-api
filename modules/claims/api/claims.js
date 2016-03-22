@@ -11,6 +11,41 @@ const AuthMiddleware = require("../../authentication/src/AuthMiddleware");
 // *************************************************************************
 
 // =========================================================================
+// GET - /claims/count
+// =========================================================================
+// Get the number of claims given the search criteria.
+router.get('/count', AuthMiddleware.authenticate(), function(req, res) {
+    ClaimFactory.getCount({
+        search: req.query.search,
+        rangeStart: req.query.rangeStart,
+        rangeEnd: req.query.rangeEnd,
+        status: req.query.status
+    }, function(err, count) {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.status(200).send(count);
+        }
+    });
+});
+
+// =========================================================================
+// POST - /claims/validate
+// =========================================================================
+// validate XML against XSD
+router.post('/validate', AuthMiddleware.authenticate(), function(req, res) {
+    ClaimFactory.validateXml({
+        xmlContent: req.body.xmlContent
+    }, function(err, data) {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.status(200).send(data);
+        }
+    });
+});
+
+// =========================================================================
 // GET - /claims
 // =========================================================================
 // Get claims based on query parameters. If id is passed in, 1 result is returned, otherwise an array is returned
@@ -40,8 +75,11 @@ router.get('/', AuthMiddleware.authenticate(), function(req, res) {
             paginate: req.query.paginate,
             perPage: req.query.perPage,
             page: req.query.page,
+            sort: req.query.sort,
             sortBy: req.query.sortBy,
             search: req.query.search,
+            rangeStart: req.query.rangeStart,
+            rangeEnd: req.query.rangeEnd,
             status: req.query.status
         }, function(err, data) {
             if (err) {

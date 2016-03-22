@@ -1,16 +1,17 @@
-var dotenv = require('dotenv');
+"use strict";
+const dotenv = require('dotenv');
 dotenv.load();
-var environment = process.env.NODE_ENV;
+const environment = process.env.NODE_ENV;
 
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
 
-var mongoose = require('mongoose');
-var configDB = require('./config/database.json')[environment];
+const mongoose = require('mongoose');
+const configDB = require('./config/database.json')[environment];
 
-var app = express();
+const app = express();
 
 mongoose.connect(configDB.host, configDB.db, configDB.port,
     configDB.credentials,
@@ -31,11 +32,11 @@ app.use(bodyParser.urlencoded({
 
 /*
 @todo validate xml (if any) against xsd in claim
-var xsd = require('libxml-xsd');
+const xsd = require('libxml-xsd');
 
 fs = require('fs');
-var schemaStr = fs.readFileSync("./MitchellClaim.xsd");
-var claimStr = fs.readFileSync("./create-claim.xml");
+const schemaStr = fs.readFileSync("./MitchellClaim.xsd");
+const claimStr = fs.readFileSync("./create-claim.xml");
 xsd.parseFile("./MitchellClaim.xsd", function(err, schema){
     console.log("HELO");
     console.log(schema);
@@ -53,7 +54,7 @@ app.use('/claims', require('./modules/claims/api/claims'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+    const err = new Error('Not Found');
     err.status = 404;
     next(err);
 });

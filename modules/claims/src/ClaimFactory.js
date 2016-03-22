@@ -1,6 +1,8 @@
 "use strict";
 
 const moment = require("moment");
+const xsd = require('libxml-xsd');
+const fs = require('fs');
 const Claim = require("./Claim");
 const ClaimsSchema = require("../schemas/claims");
 const Error = require("../../errors/src/Error");
@@ -8,6 +10,46 @@ const Error = require("../../errors/src/Error");
 module.exports = class ClaimFactory {
 
     constructor() {}
+
+    // Pass in queryObj and callback
+    static getCount(queryObj, callback) {
+
+        let query = {};
+        if (queryObj.search) {
+            query.claimantFirstName = {
+                $regex: new RegExp(queryObj.search, "i")
+            };
+        }
+        if (queryObj.rangeStart && queryObj.rangeEnd) {
+            //query.lossDate = {"$gte": moment(queryObj.rangeStart).toDate() , "$lt": moment(queryObj.rangeEnd).toDate()};
+        }
+        if (queryObj.status) {
+            query.status = queryObj.status;
+        }
+        ClaimsSchema.count(query, function(err, count) {
+            if (err) {
+                return callback(new Error("DBA002", err.message));
+            }
+            return callback(null, {
+                count: count
+            });
+        });
+    }
+
+    // Pass in queryObj and callback
+    static validateXml(reqObj, callback) {
+
+        xsd.parseFile("./MitchellClaim.xsd", function(err, schema){
+            console.log(schema);
+            schema.validate(reqObj.xmlContent, function(err, validationErrors){
+                if (err) {
+                    return callback(err);
+                }
+                return callback(null, String(validationErrors));
+
+            });
+        });
+    }
 
     //takes an object of claim, writes to db, and returns a Claim object.
     static create(newObj, callback) {
@@ -174,15 +216,15 @@ module.exports = class ClaimFactory {
 
 
     static find(params, callback) {
-        var select = {};
+        let select = {};
         if (params.include) {
-            var include = params.include.split(",");
-            for (var i = 0; i < include.length; i++) {
+            const include = params.include.split(",");
+            for (let i = 0; i < include.length; i++) {
                 select[include[i]] = 1;
             }
         } else if (params.exclude) {
-            var exclude = params.exclude.split(",");
-            for (var j = 0; j < exclude.length; j++) {
+            const exclude = params.exclude.split(",");
+            for (let j = 0; j < exclude.length; j++) {
                 select[exclude[j]] = 0;
             }
         } else {
@@ -192,26 +234,35 @@ module.exports = class ClaimFactory {
             };
         }
 
-        var query = {};
-        var paginate = {};
-        var sort = {};
+        let query = {};
+        let paginate = {};
+        let sort = {};
         paginate.paginate = params.paginate != "false";
         paginate.perPage = params.perPage ? params.perPage : 20;
         paginate.page = params.page ? params.page : 1;
-        sort[params.sortBy ? params.sortBy : "name"] = params.sort == -1 ? -1 : 1;
+        sort[params.sortBy ? params.sortBy : "lossDate"] = Number(params.sort) == Number(1) ? 1 : -1;
 
         if (params.search) {
-            query = {
-                name: {
-                    $regex: new RegExp(params.search, "i")
-                }
+            query.claimantFirstName = {
+                $regex: new RegExp(params.search, "i")
             };
+        }
+        if (params.rangeStart && params.rangeEnd) {
+            /*let rangeStartMom = moment(params.rangeStart);
+            let dateRangeStart = new Date();
+            dateRangeStart.setYear(rangeStartMom.get("year"));
+            dateRangeStart.setMonth(rangeStartMom.get("month"));
+            dateRangeStart.setDate(rangeStartMom.get("day"));*/
+            //console.log(params.rangeStart, new Date(moment(String(params.rangeStart)).toISOString()));
+            //console.log(params.rangeStart,  new Date(rangeStartMom.get("year"), rangeStartMom.get("month"), rangeStartMom.get("day")));
+            console.log(moment(params.rangeStart).isValid());
+            //query.lossDate = {"$gt": moment(params.rangeStart).toDate()};
         }
         if (params.status) {
             query.status = params.status;
         }
 
-        var schemaQuery = ClaimsSchema.find(query).select(select);
+        const schemaQuery = ClaimsSchema.find(query).select(select);
 
         if (paginate.paginate) {
             schemaQuery.limit(paginate.perPage).skip(paginate.perPage * (paginate.page - 1));
