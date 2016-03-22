@@ -52,9 +52,6 @@ module.exports = class Error {
             case "CLA003":
                 this.msg = "Claim does not exist: " + optParam1;
                 break;
-            case "SIA004":
-                this.msg = "Site is required";
-                break;
 
             default:
                 this.msg = "Unknown error";

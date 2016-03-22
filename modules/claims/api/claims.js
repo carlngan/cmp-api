@@ -23,7 +23,17 @@ router.get('/', AuthMiddleware.authenticate(), function(req, res) {
                 res.status(200).send(data);
             }
         });
-    } else {
+    }
+    else if (req.query.claimNumber) {
+        ClaimFactory.findByClaimNumber(req.query.claimNumber, function(err, data) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                res.status(200).send(data);
+            }
+        });
+    }
+    else {
         ClaimFactory.find({
             include: req.query.include,
             exclude: req.query.exclude,
@@ -48,7 +58,7 @@ router.get('/', AuthMiddleware.authenticate(), function(req, res) {
 // POST - /claims
 // =========================================================================
 // Creates a new claim
-router.post('/', function(req, res) {
+router.post('/', AuthMiddleware.authenticate(), function(req, res) {
 
     if (!req.body.claimNumber) {
         return res.status(500).send(new Error("CLA001"));
@@ -101,7 +111,7 @@ router.put('/:claimId', AuthMiddleware.authenticate(), function(req, res) {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.status(200).end();
+            res.status(200).send(data);
         }
     });
 });
@@ -110,7 +120,7 @@ router.put('/:claimId', AuthMiddleware.authenticate(), function(req, res) {
 // DELETE - /claims/:claimId
 // =========================================================================
 // deletes a claim
-router.put('/:claimId', AuthMiddleware.authenticate(), function(req, res) {
+router.delete('/:claimId', AuthMiddleware.authenticate(), function(req, res) {
     ClaimFactory.delete(req.params.claimId, function(err) {
         if (err) {
             res.status(500).send(err);

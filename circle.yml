@@ -1,11 +1,14 @@
-dependencies:
-  pre:
-    - npm install -g dredd
+machine:
+  timezone:
+    America/Los_Angeles
+  node:
+    version: 5.1.0
+  environment:
+    NODE_ENV: test
+    PORT: 3001
 test:
-  pre:
-    - dredd
 deployment:
-  staging:
+  production:
     branch: master
     heroku:
       appname: cmp-api

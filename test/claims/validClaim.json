@@ -1,0 +1,26 @@
+{
+    "claimNumber": "22c9c23bac142856018ce14a26b6c299",
+    "claimantFirstName": "George",
+    "claimantLastName": "Washington",
+    "status": "OPEN",
+    "lossDate": "2014-07-09T17:19:13.631-07:00",
+    "lossInfo": {
+        "causeOfLoss": "Collision",
+        "reportedDate": "2014-07-10T17:19:13.676-07:00",
+        "lossDescription": "Crashed into an apple tree."
+    },
+    "assignedAdjusterID": "12345",
+    "vehicles": [{
+        "modelYear": "2015",
+        "makeDescription": "Ford",
+        "modelDescription": "Mustang",
+        "engineDescription": "EcoBoost",
+        "exteriorColor": "Deep Impact Blue",
+        "vin": "1M8GDM9AXKP042788",
+        "licPlate": "NO1PRES",
+        "licPlateState": "VA",
+        "licPlateExpDate": "2015-03-10-07:00",
+        "damageDescription": "Front end smashed in. Apple dents in roof.",
+        "mileage": "1776"
+    }]
+}

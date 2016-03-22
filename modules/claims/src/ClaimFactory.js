@@ -1,5 +1,6 @@
 "use strict";
 
+const moment = require("moment");
 const Claim = require("./Claim");
 const ClaimsSchema = require("../schemas/claims");
 const Error = require("../../errors/src/Error");
@@ -19,15 +20,42 @@ module.exports = class ClaimFactory {
             return callback(new Error("CLA001"));
         }
 
-        claim.claimantFirstName = newObj.claimantFirstName;
-        claim.claimantLastName = newObj.claimantLastName;
-        claim.status = newObj.status;
-        claim.lossDate = newObj.lossDate;
-        claim.lossInfo = newObj.lossInfo;
-        claim.assignedAdjusterID = newObj.assignedAdjusterID;
-        claim.vehicles = newObj.vehicles;
-        claim.xml = newObj.xml;
-        claim.json = newObj.json;
+        if (newObj.claimantFirstName) {
+            claim.claimantFirstName = newObj.claimantFirstName;
+        }
+        if (newObj.claimantLastName) {
+            claim.claimantLastName = newObj.claimantLastName;
+        }
+        if (newObj.status) {
+            claim.status = newObj.status;
+        }
+        if (newObj.lossDate) {
+            claim.lossDate = moment(newObj.lossDate);
+        }
+        if (newObj.lossInfo) {
+            if(newObj.lossInfo.reportedDate){
+                newObj.lossInfo.reportedDate = moment(newObj.lossInfo.reportedDate);
+            }
+            claim.lossInfo = newObj.lossInfo;
+        }
+        if (newObj.assignedAdjusterID) {
+            claim.assignedAdjusterID = newObj.assignedAdjusterID;
+        }
+        if (newObj.vehicles) {
+            newObj.vehicles.map(function(vehicle){
+                if(vehicle.licPlateExpDate){
+                    vehicle.licPlateExpDate = moment(vehicle.licPlateExpDate);
+                }
+                return vehicle;
+            });
+            claim.vehicles = newObj.vehicles;
+        }
+        if (newObj.xml) {
+            claim.xml = newObj.xml;
+        }
+        if (newObj.json) {
+            claim.json = newObj.json;
+        }
 
         //@todo make sure claim number is unique
 
@@ -67,12 +95,21 @@ module.exports = class ClaimFactory {
                     claim.lossDate = updateObj.lossDate;
                 }
                 if (updateObj.lossInfo) {
+                    if(updateObj.lossInfo.reportedDate){
+                        updateObj.lossInfo.reportedDate = moment(updateObj.lossInfo.reportedDate);
+                    }
                     claim.lossInfo = updateObj.lossInfo;
                 }
                 if (updateObj.assignedAdjusterID) {
                     claim.assignedAdjusterID = updateObj.assignedAdjusterID;
                 }
                 if (updateObj.vehicles) {
+                    updateObj.vehicles.map(function(vehicle){
+                        if(vehicle.licPlateExpDate){
+                            vehicle.licPlateExpDate = moment(vehicle.licPlateExpDate);
+                        }
+                        return vehicle;
+                    });
                     claim.vehicles = updateObj.vehicles;
                 }
                 if (updateObj.xml) {
@@ -124,6 +161,17 @@ module.exports = class ClaimFactory {
             }
         });
     }
+
+    static findByClaimNumber(claimNumber, callback) {
+        ClaimsSchema.findOne({claimNumber: claimNumber}).exec(function(err, claim) {
+            if (err) {
+                callback(new Error("DBA002", err.message));
+            } else {
+                callback(null, new Claim(claim));
+            }
+        });
+    }
+
 
     static find(params, callback) {
         var select = {};
