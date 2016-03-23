@@ -22,7 +22,8 @@
         "request": "~2.69.0",
         "request-ip": "~1.2.2",
         "underscore": "~1.8.3",
-        "libxml-xsd": "~0.5.2"
+        "libxml-xsd": "~0.5.2",
+        "libxmljs": "~0.17.1"
     },
     "devDependencies": {
         "mocha": "~2.4.5",
