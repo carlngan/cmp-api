@@ -21,7 +21,7 @@ module.exports = class ClaimFactory {
             };
         }
         if (queryObj.rangeStart && queryObj.rangeEnd) {
-            //query.lossDate = {"$gte": moment(queryObj.rangeStart).toDate() , "$lt": moment(queryObj.rangeEnd).toDate()};
+            query.lossDate = {"$gte": moment(queryObj.rangeStart).toISOString() , "$lt": moment(queryObj.rangeEnd).toISOString()};
         }
         if (queryObj.status) {
             query.status = queryObj.status;
@@ -248,15 +248,7 @@ module.exports = class ClaimFactory {
             };
         }
         if (params.rangeStart && params.rangeEnd) {
-            /*let rangeStartMom = moment(params.rangeStart);
-            let dateRangeStart = new Date();
-            dateRangeStart.setYear(rangeStartMom.get("year"));
-            dateRangeStart.setMonth(rangeStartMom.get("month"));
-            dateRangeStart.setDate(rangeStartMom.get("day"));*/
-            //console.log(params.rangeStart, new Date(moment(String(params.rangeStart)).toISOString()));
-            //console.log(params.rangeStart,  new Date(rangeStartMom.get("year"), rangeStartMom.get("month"), rangeStartMom.get("day")));
-            console.log(moment(params.rangeStart).isValid());
-            //query.lossDate = {"$gt": moment(params.rangeStart).toDate()};
+            query.lossDate = {"$gte": moment(params.rangeStart).toISOString() , "$lt": moment(params.rangeEnd).toISOString()};
         }
         if (params.status) {
             query.status = params.status;
