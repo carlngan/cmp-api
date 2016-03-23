@@ -11,7 +11,7 @@ const credentials = {
     "password": "ngan"
 };
 
-var validXmlClaim = fs.readFileSync("./create-claim.xml");
+var validXmlClaim = fs.readFileSync("./test/claims/create-claim.xml");
 var validClaimJson = JSON.parse(fs.readFileSync('./test/claims/validClaim.json', 'utf8'));
 let token = "";
 let claimId = "";
