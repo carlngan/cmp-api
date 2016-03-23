@@ -1,7 +1,7 @@
 "use strict";
 
 const moment = require("moment");
-//var xsd = require('libxml-xsd');
+const xsd = require('libxml-xsd');
 const fs = require('fs');
 const Claim = require("./Claim");
 const ClaimsSchema = require("../schemas/claims");
@@ -39,7 +39,7 @@ module.exports = class ClaimFactory {
     // Pass in queryObj and callback
     static validateXml(reqObj, callback) {
 
-        /*xsd.parseFile("./MitchellClaim.xsd", function(err, schema){
+        xsd.parseFile("./MitchellClaim.xsd", function(err, schema){
             schema.validate(reqObj.xmlContent, function(err, validationErrors){
                 if (err) {
                     return callback(err);
@@ -47,7 +47,7 @@ module.exports = class ClaimFactory {
                 return callback(null, String(validationErrors));
 
             });
-        });*/
+        });
     }
 
     //takes an object of claim, writes to db, and returns a Claim object.
