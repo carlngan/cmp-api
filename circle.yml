@@ -11,7 +11,7 @@ dependencies:
     - rm -rf node_modules
     - npm install
     - 'npm start':
-      background: true
+          background: true
 test:
   override:
     - mocha ./test
