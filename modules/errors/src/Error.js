@@ -52,7 +52,12 @@ module.exports = class Error {
             case "CLA003":
                 this.msg = "Claim does not exist: " + optParam1;
                 break;
-
+            case "CLA004":
+                this.msg = "Claim number must be unique";
+                break;
+            case "CLA005":
+                this.msg = "Claim number already exists";
+                break;
             default:
                 this.msg = "Unknown error";
         }

@@ -98,15 +98,25 @@ module.exports = class ClaimFactory {
             claim.json = newObj.json;
         }
 
-        //@todo make sure claim number is unique
-
-        claim.save(function(err, cbClaim) {
+        //make sure claim number is unique
+        ClaimsSchema.findOne({claimNumber: newObj.claimNumber}).exec(function(err, foundClaim) {
             if (err) {
-                callback(new Error("DBA001", err.message));
-            } else {
-                callback(null, new Claim(cbClaim));
+                return callback(new Error("DBA003", err.message));
+            }
+            else if (foundClaim) {
+                return callback(new Error("CLA004"));
+            }
+            else{
+                claim.save(function(err, cbClaim) {
+                    if (err) {
+                        callback(new Error("DBA001", err.message));
+                    } else {
+                        callback(null, new Claim(cbClaim));
+                    }
+                });
             }
         });
+
     }
 
     static update(updateObj, callback) {
@@ -122,7 +132,6 @@ module.exports = class ClaimFactory {
                 return callback(new Error("CLA003", "Claim Number: "+updateObj.claimNumber));
             }
             else {
-                claim.claimNumber = updateObj.claimNumber;
                 if (updateObj.claimantFirstName) {
                     claim.claimantFirstName = updateObj.claimantFirstName;
                 }
@@ -160,15 +169,38 @@ module.exports = class ClaimFactory {
                     claim.json = updateObj.json;
                 }
 
-                //@todo make sure claim number is unique
+                //if claim number has changed
+                claim.claimNumber = updateObj.claimNumber;
+                if(claim.claimNumber != updateObj.claimNumber){
+                    //make sure claim number is available
+                    ClaimsSchema.findOne({claimNumber: updateObj.claimNumber}).exec(function(err, foundClaim) {
+                        if (err) {
+                            return callback(new Error("DBA003", err.message));
+                        }
+                        else if (foundClaim) {
+                            return callback(new Error("CLA005"));
+                        }
+                        else{
+                            claim.save(function(err, cbClaim) {
+                                if (err) {
+                                    callback(new Error("DBA003", err.message));
+                                } else {
+                                    callback(null, new Claim(cbClaim));
+                                }
+                            });
+                        }
+                    });
+                }
+                else{
+                    claim.save(function(err, cbClaim) {
+                        if (err) {
+                            callback(new Error("DBA003", err.message));
+                        } else {
+                            callback(null, new Claim(cbClaim));
+                        }
+                    });
+                }
 
-                claim.save(function(err, cbClaim) {
-                    if (err) {
-                        callback(new Error("DBA003", err.message));
-                    } else {
-                        callback(null, new Claim(cbClaim));
-                    }
-                });
             }
         });
     }
@@ -228,8 +260,8 @@ module.exports = class ClaimFactory {
             }
         } else {
             select = {
-                name: 1,
-                status: 1
+                claimNumber: 1,
+                claimantFirstName: 1
             };
         }
 
