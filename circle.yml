@@ -8,6 +8,7 @@ machine:
     PORT: 3001
 dependencies:
   pre:
+    - npm install -g node-gyp@latest
     - npm start
 test:
   override:
