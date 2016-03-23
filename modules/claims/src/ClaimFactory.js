@@ -1,7 +1,7 @@
 "use strict";
 
 const moment = require("moment");
-var xsd = require('libxml-xsd');
+//var xsd = require('libxml-xsd');
 const fs = require('fs');
 const Claim = require("./Claim");
 const ClaimsSchema = require("../schemas/claims");
