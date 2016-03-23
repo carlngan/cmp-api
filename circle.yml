@@ -8,9 +8,7 @@ machine:
     PORT: 3001
 dependencies:
   pre:
-    # start the web server
-    - 'npm start':
-          background: true
+    - npm start
 test:
   override:
     - mocha ./test
