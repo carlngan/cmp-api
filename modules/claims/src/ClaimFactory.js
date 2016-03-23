@@ -40,7 +40,6 @@ module.exports = class ClaimFactory {
     static validateXml(reqObj, callback) {
 
         xsd.parseFile("./MitchellClaim.xsd", function(err, schema){
-            console.log(schema);
             schema.validate(reqObj.xmlContent, function(err, validationErrors){
                 if (err) {
                     return callback(err);
