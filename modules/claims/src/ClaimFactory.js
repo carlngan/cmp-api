@@ -145,10 +145,10 @@ module.exports = class ClaimFactory {
                     claim.lossDate = updateObj.lossDate;
                 }
                 if (updateObj.lossInfo) {
+                    claim.lossInfo = updateObj.lossInfo;
                     if(updateObj.lossInfo.reportedDate){
                         updateObj.lossInfo.reportedDate = moment(updateObj.lossInfo.reportedDate);
                     }
-                    claim.lossInfo = updateObj.lossInfo;
                 }
                 if (updateObj.assignedAdjusterID) {
                     claim.assignedAdjusterID = updateObj.assignedAdjusterID;
