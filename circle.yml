@@ -10,7 +10,7 @@ dependencies:
   pre:
     - rm -rf node_modules
     - npm install
-    - 'npm start'
+    - 'npm start':
       background: true
 test:
   override:
