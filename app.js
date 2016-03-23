@@ -30,6 +30,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+var xsd = require('libxml-xsd');
 
 app.use('/authentication', require('./modules/authentication/api/authentication'));
 app.use('/claims', require('./modules/claims/api/claims'));

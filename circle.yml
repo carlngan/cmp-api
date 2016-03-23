@@ -9,7 +9,8 @@ machine:
 dependencies:
   pre:
     - npm install -g node-gyp@latest
-    - npm start
+    - 'npm start'
+      #background: true
 test:
   override:
     - mocha ./test
