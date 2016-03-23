@@ -2,12 +2,13 @@ machine:
   timezone:
     America/Los_Angeles
   node:
-    version: 5.1.0
+    version: 4.2.2
   environment:
     NODE_ENV: test
     PORT: 3001
 dependencies:
   pre:
+    - npm install -g npm
     - npm install -g node-gyp@latest
     - 'npm start'
       #background: true
